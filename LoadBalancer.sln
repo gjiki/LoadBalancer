@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadBalancer", "LoadBalancer\LoadBalancer.csproj", "{22FCF245-9D8C-4090-9EB9-C2C0D347F1D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{4F8E3D2B-ECF1-4174-932C-C30DF2118B8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{BD9CAA8E-C87E-46A2-90CA-AC91E0E8DAF5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22FCF245-9D8C-4090-9EB9-C2C0D347F1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22FCF245-9D8C-4090-9EB9-C2C0D347F1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22FCF245-9D8C-4090-9EB9-C2C0D347F1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22FCF245-9D8C-4090-9EB9-C2C0D347F1D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F8E3D2B-ECF1-4174-932C-C30DF2118B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F8E3D2B-ECF1-4174-932C-C30DF2118B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F8E3D2B-ECF1-4174-932C-C30DF2118B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F8E3D2B-ECF1-4174-932C-C30DF2118B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD9CAA8E-C87E-46A2-90CA-AC91E0E8DAF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD9CAA8E-C87E-46A2-90CA-AC91E0E8DAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD9CAA8E-C87E-46A2-90CA-AC91E0E8DAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD9CAA8E-C87E-46A2-90CA-AC91E0E8DAF5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4FEBA59B-9F09-4C22-BCA9-16E1E44EA7CD}
+	EndGlobalSection
+EndGlobal
