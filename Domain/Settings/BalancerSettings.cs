@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Domain.Settings;
+﻿namespace Domain.Settings;
 
 public class BalancerSettings
 {

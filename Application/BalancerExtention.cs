@@ -56,7 +56,7 @@ public class BalancerExtention
                 ind++;
             }
 
-            if (ind == _lastServerInd) break;
+            //if (ind == _lastServerInd) break;
             if (!_workingServers[ind]) continue;
 
             decimal percentage = (decimal)_requestCounts[ind] / _totalRequests * 100.0m;
@@ -69,13 +69,19 @@ public class BalancerExtention
         return _workingServers.Keys.First();
     }
 
-    public static void ResetValues()
+    public void ResetValues()
     {
         _totalRequests = 0;
         for (int i = 0; i < _requestCounts.Count(); i++)
         {
             _requestCounts[i] = 0;
         }
+    }
+
+    public void IncreaseCount(int ind)
+    {
+        _requestCounts[ind]++;
+        _totalRequests++;
     }
 
     public static void ResetServers()

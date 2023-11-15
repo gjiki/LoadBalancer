@@ -40,6 +40,8 @@ if (app.Environment.IsDevelopment())
 //RunBackgroundJobs();
 app.UseHttpsRedirection();
 
+app.UseLoadBalancingMiddleware();
+
 app.UseAuthorization();
 
 app.MapControllers();

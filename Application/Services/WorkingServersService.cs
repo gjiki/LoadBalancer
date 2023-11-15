@@ -1,9 +1,8 @@
 ﻿using Domain.Settings;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace Application.Services;
 
@@ -29,25 +28,10 @@ public class WorkingServersService : BackgroundService
 
             for (int i = 0; i < _balancerSettings.Hosts.Count; i++)
             {
-                using (var client = new HttpClient())
+                var alive = await CheckHealthCare(i);
+                if (alive)
                 {
-                    client.Timeout = TimeSpan.FromMinutes(_balancerSettings.Timeout);
-                    client.BaseAddress = new Uri(_balancerSettings.Hosts[i].Server);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    try
-                    {
-                        HttpResponseMessage response = await client.GetAsync("_health");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            BalancerExtention.AddWorkingServers(i);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
+                    BalancerExtention.AddWorkingServers(i);
                 }
             }
 
@@ -63,5 +47,35 @@ public class WorkingServersService : BackgroundService
                 BalancerExtention.AddWorkingServers(i);
             }
         }*/
+    }
+
+    private async Task<bool> CheckHealthCare(int ind)
+    {
+        using (var client = new HttpClient())
+        {
+            client.Timeout = TimeSpan.FromMinutes(_balancerSettings.Timeout);
+            client.BaseAddress = new Uri(_balancerSettings.Hosts[ind].Server);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("_health");
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+            }
+            catch (SocketException e)
+            {
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return false;
+        }
     }
 }
