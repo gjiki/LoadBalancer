@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHangfire(configuration => configuration
+/*builder.Services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
@@ -26,7 +26,7 @@ builder.Services.AddHangfire(configuration => configuration
                     QueuePollInterval = TimeSpan.Zero,
                     UseRecommendedIsolationLevel = true,
                     DisableGlobalLocks = true
-                }));
+                }));*/
 
 var app = builder.Build();
 
@@ -37,8 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHangfireDashboard();
-RunBackgroundJobs();
+//app.UseHangfireDashboard();
+//RunBackgroundJobs();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -53,5 +53,6 @@ void RunBackgroundJobs()
     var backgroundJobsSettings = new BackgroundJobsSettings();
     builder.Configuration.GetSection("BackgroundJobsSettings").Bind(backgroundJobsSettings);
     var pingServerOptions = backgroundJobsSettings.JobSettings.Where(x => x.Name == "PingServers").First();
-    RecurringJob.AddOrUpdate<IBackgroundJobsService>(pingServerOptions.Name, service => service.ReevaluateServers(), Cron.Minutely(), TimeZoneInfo.Local);
+    //RecurringJob.AddOrUpdate<IBackgroundJobsService>(pingServerOptions.Name, service => service.ReevaluateServers(), Cron.Minutely(), TimeZoneInfo.Local);
+    RecurringJob.AddOrUpdate<IBackgroundJobsService>(service => service.ReevaluateServers(), "*/5 * * * * *");
 }

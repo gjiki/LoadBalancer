@@ -1,5 +1,6 @@
 ﻿using Domain.Settings;
 using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
 
 namespace LoadBalancer;
 
@@ -7,7 +8,7 @@ public class BalancerExtention
 {
     // private fields
     private static List<int> _requestCounts;
-    private static HashSet<int> _workingServers;
+    private static ConcurrentDictionary<int, bool> _workingServers;
     private static int _totalRequests;
     private static int _lastServerInd;
 
@@ -17,7 +18,7 @@ public class BalancerExtention
     static BalancerExtention()
     {
         _requestCounts = new List<int>();
-        _workingServers = new HashSet<int>();
+        _workingServers = new ConcurrentDictionary<int, bool>();
         _totalRequests = 0;
         _lastServerInd = -1;
     }
@@ -33,7 +34,10 @@ public class BalancerExtention
         for (int i = 0; i < _balancerSettings.Hosts.Count(); i++)
         {
             _requestCounts.Add(0);
+            _workingServers.TryAdd(i, false);
         }
+
+        
     }
 
     public int NextServer()
@@ -53,7 +57,7 @@ public class BalancerExtention
             }
 
             if (ind == _lastServerInd) break;
-            if (!_workingServers.Contains(ind)) continue;
+            if (!_workingServers[ind]) continue;
 
             decimal percentage = ((decimal)_requestCounts[ind] / _totalRequests) * 100.0m;
             if (percentage < _balancerSettings.Hosts[ind].Load)
@@ -62,7 +66,7 @@ public class BalancerExtention
             }
         }
 
-        return _workingServers.First();
+        return _workingServers.Keys.First();
     }
 
     public static void ResetValues()
@@ -76,15 +80,18 @@ public class BalancerExtention
 
     public static void ResetServers()
     {
-        _workingServers.Clear();
+        foreach (KeyValuePair<int, bool> it in _workingServers)
+        {
+            _workingServers[it.Key] = false;
+        }
     }
 
     public static void AddWorkingServers(int ind)
     {
-        _workingServers.Add(ind);
+        _workingServers[ind] = true;
     }
 
-    public static HashSet<int> GetWorkingServers()
+    public static ConcurrentDictionary<int, bool> GetWorkingServers()
     {
         return _workingServers;
     }
