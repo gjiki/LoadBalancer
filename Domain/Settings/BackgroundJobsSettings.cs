@@ -2,7 +2,7 @@
 
 public class BackgroundJobsSettings
 {
-    public IEnumerable<JobSetting> TaskSettings { get; set; }
+    public IEnumerable<JobSetting> JobSettings { get; set; }
 }
 
 public class JobSetting

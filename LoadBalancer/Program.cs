@@ -1,9 +1,14 @@
+using Application;
+using Domain.Services;
 using Domain.Settings;
 using Hangfire;
+using Hangfire.SqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<BalancerSettings>(builder.Configuration.GetSection("BalancerSettings"));
+builder.Services.Configure<BackgroundJobsSettings>(builder.Configuration.GetSection("BackgroundJobsSettings"));
+builder.Services.AddLoadBalancerApplication(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -13,8 +18,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings());
-builder.Services.AddHangfireServer();
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(builder.Configuration.GetSection("ConnectionStrings:LoadBalancer").Value.ToString(), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
 
 var app = builder.Build();
 
@@ -38,6 +50,8 @@ app.Run();
 
 void RunBackgroundJobs()
 {
-    var backgroundTasksSettings = builder.Configuration.GetValue<BackgroundJobsSettings>("BackgroundJobsSettings");
-
+    var backgroundJobsSettings = new BackgroundJobsSettings();
+    builder.Configuration.GetSection("BackgroundJobsSettings").Bind(backgroundJobsSettings);
+    var pingServerOptions = backgroundJobsSettings.JobSettings.Where(x => x.Name == "PingServers").First();
+    RecurringJob.AddOrUpdate<IBackgroundJobsService>(pingServerOptions.Name, service => service.ReevaluateServers(), "*/20 * * * * *");
 }

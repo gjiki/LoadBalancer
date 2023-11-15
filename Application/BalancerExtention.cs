@@ -65,7 +65,7 @@ public class BalancerExtention
         return _workingServers.First();
     }
 
-    public void ResetValues()
+    public static void ResetValues()
     {
         _totalRequests = 0;
         for (int i = 0; i < _requestCounts.Count(); i++)
@@ -74,8 +74,13 @@ public class BalancerExtention
         }
     }
 
-    public void ResetWorkings()
+    public static void ResetServers()
     {
         _workingServers.Clear();
+    }
+
+    public static void AddWorkingServers(int ind)
+    {
+        _workingServers.Add(ind);
     }
 }
