@@ -36,10 +36,17 @@ public class WorkingServersService : BackgroundService
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage response = await client.GetAsync("_health");
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        BalancerExtention.AddWorkingServers(i);
+                        HttpResponseMessage response = await client.GetAsync("_health");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            BalancerExtention.AddWorkingServers(i);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
                     }
                 }
             }
