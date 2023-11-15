@@ -36,8 +36,6 @@ public class BalancerExtention
             _requestCounts.Add(0);
             _workingServers.TryAdd(i, false);
         }
-
-
     }
 
     public int NextServer()
@@ -65,8 +63,6 @@ public class BalancerExtention
                 return ind;
             }
         }
-
-        return _workingServers.Keys.First();
     }
 
     public void ResetValues()
