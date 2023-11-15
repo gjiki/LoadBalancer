@@ -31,7 +31,7 @@ public class WorkingServersService : BackgroundService
             {
                 using (var client = new HttpClient())
                 {
-                    client.Timeout = TimeSpan.FromMinutes(0.25);
+                    client.Timeout = TimeSpan.FromMinutes(_balancerSettings.Timeout);
                     client.BaseAddress = new Uri(_balancerSettings.Hosts[i].Server);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
