@@ -83,4 +83,9 @@ public class BalancerExtention
     {
         _workingServers.Add(ind);
     }
+
+    public static HashSet<int> GetWorkingServers()
+    {
+        return _workingServers;
+    }
 }

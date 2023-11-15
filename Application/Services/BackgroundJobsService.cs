@@ -18,6 +18,8 @@ public class BackgroundJobsService : IBackgroundJobsService
     public async Task ReevaluateServers()
     {
         BalancerExtention.ResetServers();
+
+        /*
         var ping = new Ping();
         for (int i = 0; i < _balancerSettings.Hosts.Count; i++)
         {
@@ -26,6 +28,8 @@ public class BackgroundJobsService : IBackgroundJobsService
             {
                 BalancerExtention.AddWorkingServers(i);
             }
-        }
+        }*/
+        BalancerExtention.AddWorkingServers(1);
+        BalancerExtention.AddWorkingServers(2);
     }
 }

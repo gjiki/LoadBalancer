@@ -53,5 +53,5 @@ void RunBackgroundJobs()
     var backgroundJobsSettings = new BackgroundJobsSettings();
     builder.Configuration.GetSection("BackgroundJobsSettings").Bind(backgroundJobsSettings);
     var pingServerOptions = backgroundJobsSettings.JobSettings.Where(x => x.Name == "PingServers").First();
-    RecurringJob.AddOrUpdate<IBackgroundJobsService>(pingServerOptions.Name, service => service.ReevaluateServers(), "*/20 * * * * *");
+    RecurringJob.AddOrUpdate<IBackgroundJobsService>(pingServerOptions.Name, service => service.ReevaluateServers(), Cron.Minutely(), TimeZoneInfo.Local);
 }
