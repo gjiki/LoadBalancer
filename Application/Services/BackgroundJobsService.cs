@@ -1,6 +1,5 @@
 ﻿using Domain.Services;
 using Domain.Settings;
-using LoadBalancer;
 using Microsoft.Extensions.Options;
 
 namespace Application.Services;

@@ -1,7 +1,7 @@
 ﻿using Domain.Settings;
-using LoadBalancer;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 
@@ -23,22 +23,28 @@ public class WorkingServersService : BackgroundService
 
     public async Task ReevaluateServers(CancellationToken stoppingToken)
     {
-        BalancerExtention.ResetServers();
-
-        for (int i = 0; i < _balancerSettings.Hosts.Count; i++)
+        while (!stoppingToken.IsCancellationRequested)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(_balancerSettings.Hosts[i].Server);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            BalancerExtention.ResetServers();
 
-                HttpResponseMessage response = await client.GetAsync("_health");
-                if (response.IsSuccessStatusCode)
+            for (int i = 0; i < _balancerSettings.Hosts.Count; i++)
+            {
+                using (var client = new HttpClient())
                 {
-                    BalancerExtention.AddWorkingServers(i);
+                    client.Timeout = TimeSpan.FromMinutes(0.25);
+                    client.BaseAddress = new Uri(_balancerSettings.Hosts[i].Server);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = await client.GetAsync("_health");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        BalancerExtention.AddWorkingServers(i);
+                    }
                 }
             }
+
+            Task.Delay(_balancerSettings.Delay * 1000, stoppingToken);
         }
 
         /*var ping = new Ping();

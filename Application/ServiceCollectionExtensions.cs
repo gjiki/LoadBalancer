@@ -1,6 +1,5 @@
 ﻿using Application.Services;
 using Domain.Services;
-using LoadBalancer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

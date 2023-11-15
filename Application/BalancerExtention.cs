@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
 
-namespace LoadBalancer;
+namespace Application;
 
 public class BalancerExtention
 {
@@ -37,7 +37,7 @@ public class BalancerExtention
             _workingServers.TryAdd(i, false);
         }
 
-        
+
     }
 
     public int NextServer()
@@ -59,7 +59,7 @@ public class BalancerExtention
             if (ind == _lastServerInd) break;
             if (!_workingServers[ind]) continue;
 
-            decimal percentage = ((decimal)_requestCounts[ind] / _totalRequests) * 100.0m;
+            decimal percentage = (decimal)_requestCounts[ind] / _totalRequests * 100.0m;
             if (percentage < _balancerSettings.Hosts[ind].Load)
             {
                 return ind;
