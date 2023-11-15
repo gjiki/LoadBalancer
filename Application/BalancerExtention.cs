@@ -57,8 +57,14 @@ public class BalancerExtention
             //if (ind == _lastServerInd) break;
             if (!_workingServers[ind]) continue;
 
-            decimal percentage = (decimal)_requestCounts[ind] / _totalRequests * 100.0m;
-            if (percentage < _balancerSettings.Hosts[ind].Load)
+            if (_totalRequests != 0)
+            {
+                decimal percentage = (decimal)_requestCounts[ind] / _totalRequests * 100.0m;
+                if (percentage < _balancerSettings.Hosts[ind].Load)
+                {
+                    return ind;
+                }
+            } else
             {
                 return ind;
             }

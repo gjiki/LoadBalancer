@@ -60,7 +60,7 @@ public class WorkingServersService : BackgroundService
 
             try
             {
-                HttpResponseMessage response = await client.GetAsync("_health");
+                HttpResponseMessage response = await client.GetAsync("/_health");
                 if (response.IsSuccessStatusCode)
                 {
                     return true;

@@ -2,5 +2,5 @@
 
 public interface IRequestRedirect
 {
-    Task<string> Redirect(string url);
+    Task<HttpResponseMessage> Redirect(string baseAddress, string url);
 }
