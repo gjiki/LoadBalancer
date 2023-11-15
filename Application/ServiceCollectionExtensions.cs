@@ -3,6 +3,7 @@ using Domain.Services;
 using LoadBalancer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Application;
 
@@ -13,5 +14,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBackgroundJobsService, BackgroundJobsService>();
         services.AddSingleton<BalancerExtention>();
         services.AddHostedService<WorkingServersService>();
+        services.Configure<HostOptions>(hostOptions =>
+        {
+            hostOptions.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.StopHost;
+        });
     }
 }

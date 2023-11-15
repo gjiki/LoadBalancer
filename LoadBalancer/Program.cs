@@ -2,7 +2,6 @@ using Application;
 using Domain.Services;
 using Domain.Settings;
 using Hangfire;
-using Hangfire.SqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
