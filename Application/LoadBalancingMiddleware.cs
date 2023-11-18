@@ -10,13 +10,11 @@ namespace Application;
 
 public class LoadBalancingMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly BalancerExtention _balancerExtention;
     private readonly BalancerSettings _balancerSettings;
 
-    public LoadBalancingMiddleware(RequestDelegate next, BalancerExtention balancerExtention, IOptions<BalancerSettings> balancerSettings)
+    public LoadBalancingMiddleware(BalancerExtention balancerExtention, IOptions<BalancerSettings> balancerSettings)
     {
-        _next = next;
         _balancerExtention = balancerExtention;
         _balancerSettings = balancerSettings.Value;
     }
@@ -31,7 +29,6 @@ public class LoadBalancingMiddleware
         httpContext.Response.StatusCode = (int)redirectResult.StatusCode;
         httpContext.Response.ContentType = "application/json";
         await HttpResponseWritingExtensions.WriteAsync(httpContext.Response, asJson);
-        //await _next(httpContext);
     }
 }
 
