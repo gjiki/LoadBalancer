@@ -35,18 +35,8 @@ public class WorkingServersService : BackgroundService
                 }
             }
 
-            Task.Delay(_balancerSettings.Delay * 1000, stoppingToken);
+            await Task.Delay(_balancerSettings.Delay * 1000, stoppingToken);
         }
-
-        /*var ping = new Ping();
-        for (int i = 0; i < _balancerSettings.Hosts.Count; i++)
-        {
-            var reply = ping.Send("google.com", 60 * 1000); // 1 minute time out (in ms)
-            if (reply.Status == IPStatus.Success)
-            {
-                BalancerExtention.AddWorkingServers(i);
-            }
-        }*/
     }
 
     private async Task<bool> CheckHealthCare(int ind)
@@ -66,11 +56,11 @@ public class WorkingServersService : BackgroundService
                     return true;
                 }
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

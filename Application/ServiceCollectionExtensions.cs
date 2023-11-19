@@ -10,7 +10,6 @@ public static class ServiceCollectionExtensions
 {
     public static void AddLoadBalancerApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IBackgroundJobsService, BackgroundJobsService>();
         services.AddScoped<IRequestRedirect, RequestRedirect>();
         services.AddSingleton<BalancerExtention>();
         services.AddHostedService<WorkingServersService>();

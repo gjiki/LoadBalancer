@@ -30,7 +30,6 @@ public class LoadBalancingMiddleware
         httpContext.Response.StatusCode = (int)redirectResult.StatusCode;
         httpContext.Response.ContentType = "application/json";
         await HttpResponseWritingExtensions.WriteAsync(httpContext.Response, asJson);
-        //await _next(httpContext);
     }
 }
 
